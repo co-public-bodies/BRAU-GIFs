@@ -4,15 +4,22 @@ library(tidyverse)
 library(tidylog)
 library(gganimate)
 
+# load dummy data
 brau_gif_data <- readxl::read_xlsx("~/Martin Ingram R Work/Test Area/BRAU gif/BRAU Gif Data.xlsx") |> 
     group_by(Group) |> 
     mutate(avg_line = mean(value))
 
+# dimension for height of gifs
 height_dim <- 400
 
+# dimension for width of gifs
 width_dim <- 1000
 
-brau_gif_output <- brau_gif_data |> 
+# No Text Version -----------------------------------------------------------
+
+# create basic plot with animation
+# no name, white background
+no_text_brau_gif_output <- brau_gif_data |> 
     ggplot(aes(x = location, y = value,
                fill = Group, group = location)) +
     geom_col(color = "black",
@@ -34,60 +41,21 @@ brau_gif_output <- brau_gif_data |>
     labs(title = NULL)+
     transition_reveal(time)
 
-# No Text -----------------------------------------------------------------
-
-brau_gif_output <- animate(brau_gif_output,
+# render to gif 
+no_text_brau_gif_output <- animate(no_text_brau_gif_output,
         height = height_dim,
         width = width_dim, 
         renderer = gifski_renderer(loop = TRUE))
 
 # save gif
-anim_save(animation = brau_gif_output, 
-          filename = "~/Martin Ingram R Work/Test Area/BRAU gif/BRAU_no_text.gif")
+anim_save(animation = no_text_brau_gif_output, 
+          filename = "BRAU_no_text.gif")
 
-# BRAU Name ---------------------------------------------------------------
+# Full Name Version ----------------------------------------------------------
 
-brau_gif_output <- brau_gif_data |> 
-    ggplot(aes(x = location, y = value,
-               fill = Group, group = location)) +
-    geom_col(color = "black",
-             alpha = 0.8) +
-    geom_line(aes(y = avg_line,
-                  group = Group),
-              color = 'black',
-              linewidth = 1.5)+
-    scale_fill_brewer(palette = "RdBu",
-                      direction = -1)+
-    theme_classic()+
-    theme(legend.position = "none")+
-    theme(axis.line = element_line(color = NA),
-          axis.ticks = element_line(color = NA))+
-    labs(x = NULL, y = NULL)+
-    scale_x_continuous(labels = NULL)+
-    scale_y_continuous(labels = NULL, 
-                       limits = c(0, 100))+
-    labs(title = NULL)+
-    ggtext::geom_richtext(x = 8.5, y = 90,
-                          label = "**BRAU**",
-                          label.color = NA,
-                          fill = NA, 
-                          size = 12)+
-    transition_reveal(time)
-
-brau_gif_output <- animate(brau_gif_output,
-                           height = height_dim,
-                           width = width_dim, 
-                           renderer = gifski_renderer(loop = TRUE))
-
-# save gif
-anim_save(animation = brau_gif_output, 
-          filename = "~/Martin Ingram R Work/Test Area/BRAU gif/BRAU.gif")
-
-
-# Full Name ---------------------------------------------------------------
-
-
-brau_gif_output <- brau_gif_data |> 
+# create basic plot with animation
+# version with name on the gif
+named_brau_gif_output <- brau_gif_data |> 
     ggplot(aes(x = location, y = value,
                fill = Group, group = location)) +
     geom_col(color = "black",
@@ -114,19 +82,21 @@ brau_gif_output <- brau_gif_data |>
                   size = 14)+
     transition_reveal(time)
 
-brau_gif_output <- animate(brau_gif_output,
+# render to gif 
+named_brau_gif_output <- animate(named_brau_gif_output,
                            height = height_dim,
                            width = width_dim, 
                         renderer = gifski_renderer(loop = TRUE))
 
 # save gif
-anim_save(animation = brau_gif_output, 
-          filename = "~/Martin Ingram R Work/Test Area/BRAU gif/Benchmarking.gif")
+anim_save(animation = named_brau_gif_output, 
+          filename = "Benchmarking.gif")
 
 # DPL Edition -------------------------------------------------------------
 
-
-brau_gif_output <- brau_gif_data |> 
+# create basic plot with animation
+# Dark version with blue background
+dpl_brau_gif_output <- brau_gif_data |> 
     ggplot(aes(x = location, y = value,
                fill = Group, group = location)) +
     geom_col(color = "white",
@@ -156,11 +126,12 @@ brau_gif_output <- brau_gif_data |>
                           size = 14)+
     transition_reveal(time)
 
-brau_gif_output <- animate(brau_gif_output,
+# render to gif 
+dpl_brau_gif_output <- animate(dpl_brau_gif_output,
                            height = height_dim,
                            width = width_dim, 
                            renderer = gifski_renderer(loop = TRUE))
 
 # save gif
-anim_save(animation = brau_gif_output, 
+anim_save(animation = dpl_brau_gif_output, 
           filename = "~/Martin Ingram R Work/Test Area/BRAU gif/Benchmarking_DPL.gif")
